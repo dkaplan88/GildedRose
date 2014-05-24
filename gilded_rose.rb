@@ -22,23 +22,19 @@ class GildedRose
   def update_quality
     for i in 0..(@items.size-1)
       case @items[i].name
+      when '+5 Dexterity Vest', 'Elixir of the Mongoose', 'Conjured Mana Cake'
+        handle_normal_item(@items[i])
       when 'Aged Brie'
         handle_aged_brie(@items[i])
-      when '+5 Dexterity Vest'
-        handle_dexterity_vest(@items[i])
-      when 'Elixir of the Mongoose'
-        handle_exlixir_mongoose(@items[i])
       when 'Sulfuras, Hand of Ragnaros'
         handle_sulfuras(@items[i])
       when 'Backstage passes to a TAFKAL80ETC concert'
         handle_backstage_passes(@items[i])
-      when 'Conjured Mana Cake'
-        handle_conjured_cake(@items[i])
       end
     end
   end
 
-  def handle_dexterity_vest(item)
+  def handle_normal_item(item)
     if item.quality != 0
       item.quality -= 1
       item.quality -= 1 if item.sell_in < 0
@@ -49,14 +45,6 @@ class GildedRose
   def handle_aged_brie(item)
     item.sell_in -= 1
     item.quality += 1
-  end
-
-  def handle_exlixir_mongoose(item)
-    if item.quality != 0
-      item.quality -= 1
-      item.quality -= 1 if item.sell_in < 0
-    end
-    item.sell_in -= 1
   end
 
   def handle_sulfuras(item)
@@ -71,14 +59,6 @@ class GildedRose
       item.quality += 1 if item.sell_in < 5
     end
         
-    item.sell_in -= 1
-  end
-
-  def handle_conjured_cake(item)
-    if item.quality != 0
-      item.quality -= 1
-      item.quality -= 1 if item.sell_in < 0
-    end
     item.sell_in -= 1
   end
 
