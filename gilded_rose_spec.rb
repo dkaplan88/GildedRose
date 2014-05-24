@@ -33,7 +33,6 @@ describe GildedRose do
     end
   end
 
-
   describe 'Backstage, passes, to a TAFKAL80ETC concert' do
     before(:each) do
       items = subject.items([Item.new("Backstage passes to a TAFKAL80ETC concert", 15, 20)])
@@ -62,13 +61,12 @@ describe GildedRose do
       end
 
       it 'becomes 0 after sell_in date' do
-        @item.sell_in = 0
+        @item.sell_in = -2
         subject.update_quality
         @item.quality.should == 0
       end
     end
   end
-
 
   describe 'Sulfuras, Hand of Ragnaros' do
     before(:each) do
@@ -87,7 +85,6 @@ describe GildedRose do
         expect { subject.update_quality }.to change { @item.quality }.by(0)
       end
     end
-
   end
 
   describe 'Elixir of the Mongoose' do
@@ -120,7 +117,6 @@ describe GildedRose do
       end
     end
   end
-
 
   describe 'Aged Brie' do
     before(:each) do

@@ -21,50 +21,65 @@ class GildedRose
 
   def update_quality
     for i in 0..(@items.size-1)
-      if (@items[i].name != "Aged Brie" && @items[i].name != "Backstage passes to a TAFKAL80ETC concert")
-        if (@items[i].quality > 0)
-          if (@items[i].name != "Sulfuras, Hand of Ragnaros")
-            @items[i].quality = @items[i].quality - 1
-          end
-        end
-      else
-        if (@items[i].quality < 50)
-          @items[i].quality = @items[i].quality + 1
-          if (@items[i].name == "Backstage passes to a TAFKAL80ETC concert")
-            if (@items[i].sell_in < 11)
-              if (@items[i].quality < 50)
-                @items[i].quality = @items[i].quality + 1
-              end
-            end
-            if (@items[i].sell_in < 6)
-              if (@items[i].quality < 50)
-                @items[i].quality = @items[i].quality + 1
-              end
-            end
-          end
-        end
-      end
-      if (@items[i].name != "Sulfuras, Hand of Ragnaros")
-        @items[i].sell_in = @items[i].sell_in - 1;
-      end
-      if (@items[i].sell_in < 0)
-        if (@items[i].name != "Aged Brie")
-          if (@items[i].name != "Backstage passes to a TAFKAL80ETC concert")
-            if (@items[i].quality > 0)
-              if (@items[i].name != "Sulfuras, Hand of Ragnaros")
-                @items[i].quality = @items[i].quality - 1
-              end
-            end
-          else
-            @items[i].quality = @items[i].quality - @items[i].quality
-          end
-        else
-          if (@items[i].quality < 50)
-            @items[i].quality = @items[i].quality + 1
-          end
-        end
+      case @items[i].name
+      when 'Aged Brie'
+        handle_aged_brie(@items[i])
+      when '+5 Dexterity Vest'
+        handle_dexterity_vest(@items[i])
+      when 'Elixir of the Mongoose'
+        handle_exlixir_mongoose(@items[i])
+      when 'Sulfuras, Hand of Ragnaros'
+        handle_sulfuras(@items[i])
+      when 'Backstage passes to a TAFKAL80ETC concert'
+        handle_backstage_passes(@items[i])
+      when 'Conjured Mana Cake'
+        handle_conjured_cake(@items[i])
       end
     end
+  end
+
+  def handle_dexterity_vest(item)
+    if item.quality != 0
+      item.quality -= 1
+      item.quality -= 1 if item.sell_in < 0
+    end
+    item.sell_in -= 1
+  end
+
+  def handle_aged_brie(item)
+    item.sell_in -= 1
+    item.quality += 1
+  end
+
+  def handle_exlixir_mongoose(item)
+    if item.quality != 0
+      item.quality -= 1
+      item.quality -= 1 if item.sell_in < 0
+    end
+    item.sell_in -= 1
+  end
+
+  def handle_sulfuras(item)
+  end
+
+  def handle_backstage_passes(item)
+    if item.sell_in < 0
+      item.quality = 0
+    else
+      item.quality += 1
+      item.quality += 1 if item.sell_in < 10
+      item.quality += 1 if item.sell_in < 5
+    end
+        
+    item.sell_in -= 1
+  end
+
+  def handle_conjured_cake(item)
+    if item.quality != 0
+      item.quality -= 1
+      item.quality -= 1 if item.sell_in < 0
+    end
+    item.sell_in -= 1
   end
 
 end
