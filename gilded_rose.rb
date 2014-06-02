@@ -23,43 +23,79 @@ class GildedRose
     for i in 0..(@items.size-1)
       case @items[i].name
       when '+5 Dexterity Vest', 'Elixir of the Mongoose', 'Conjured Mana Cake'
-        handle_normal_item(@items[i])
+        Normal.new(@items[i].quality, @items[i].sell_in).update_quality
       when 'Aged Brie'
-        handle_aged_brie(@items[i])
+        AgedBrie.new(@items[i].quality, @items[i].sell_in).update_quality
       when 'Sulfuras, Hand of Ragnaros'
-        handle_sulfuras(@items[i])
+        Sulfuras.new(@items[i].quality, @items[i].sell_in).update_quality
       when 'Backstage passes to a TAFKAL80ETC concert'
-        handle_backstage_passes(@items[i])
+        BackstagePass.new(@items[i].quality, @items[i].sell_in).update_quality
       end
     end
   end
 
-  def handle_normal_item(item)
-    if item.quality != 0
-      item.quality -= 1
-      item.quality -= 1 if item.sell_in < 0
+  class Normal
+    attr_reader :quality, :sell_in
+
+    def initialize(quality, sell_in)
+      @quality = quality
+      @sell_in = sell_in
     end
-    item.sell_in -= 1
-  end
 
-  def handle_aged_brie(item)
-    item.sell_in -= 1
-    item.quality += 1
-  end
-
-  def handle_sulfuras(item)
-  end
-
-  def handle_backstage_passes(item)
-    if item.sell_in < 0
-      item.quality = 0
-    else
-      item.quality += 1
-      item.quality += 1 if item.sell_in < 10
-      item.quality += 1 if item.sell_in < 5
+    def update_quality
+      if @quality != 0
+        @quality -= 1
+        @quality -= 1 if @sell_in < 0
+      end
+      @sell_in -= 1
     end
-        
-    item.sell_in -= 1
   end
 
+  class AgedBrie
+    attr_reader :quality, :sell_in
+
+    def initialize(quality, sell_in)
+      @quality = quality
+      @sell_in = sell_in
+    end
+
+    def update_quality
+      @sell_in -= 1
+      @quality += 1
+    end
+  end
+
+  class Sulfuras
+    attr_reader :quality, :sell_in
+
+    def initialize(quality, sell_in)
+      @quality = quality
+      @sell_in = sell_in
+    end
+
+    def update_quality
+    end
+  end
+
+
+  class BackstagePass
+    attr_reader :quality, :sell_in
+
+    def initialize(quality, sell_in)
+      @quality = quality
+      @sell_in = sell_in
+    end
+
+    def update_quality
+      if @sell_in < 0
+        @quality = 0
+      else
+        @quality += 1
+        @quality += 1 if @sell_in < 10
+        @quality += 1 if @sell_in < 5
+      end
+          
+      @sell_in -= 1
+    end
+  end
 end

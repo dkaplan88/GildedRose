@@ -4,30 +4,29 @@ require "rspec"
 describe GildedRose do
   describe 'handle normal items' do
     before(:each) do
-      items = subject.items([Item.new("Conjured Mana Cake", 3, 6)])
-      @item = items.first
+      @item = GildedRose::Normal.new(3, 6)
     end
 
     describe 'sell_in' do
       it 'should descrease by 1' do
-        expect { subject.update_quality }.to change { @item.sell_in }.by(-1)
+        expect { @item.update_quality }.to change { @item.sell_in }.by(-1)
       end
     end
 
     describe 'quality' do
       it 'should decrease by 1' do
-        expect { subject.update_quality }.to change { @item.quality }.by(-1)
+        expect { @item.update_quality }.to change { @item.quality }.by(-1)
       end
 
       it 'should never be less than 0' do
-        @item.quality = 0
-        expect { subject.update_quality }.to change { @item.quality }.by(0)
+        @item = GildedRose::Normal.new(0, 6)
+        expect { @item.update_quality }.to change { @item.quality }.by(0)
       end
 
       context 'passed sell_in date' do
         it 'should decrease quality by 2' do
-          @item.sell_in = -4
-          expect { subject.update_quality }.to change { @item.quality }.by(-2)
+          @item = GildedRose::Normal.new(10, -4)
+          expect { @item.update_quality }.to change { @item.quality }.by(-2)
         end
       end
     end
@@ -35,34 +34,33 @@ describe GildedRose do
 
   describe 'Backstage, passes, to a TAFKAL80ETC concert' do
     before(:each) do
-      items = subject.items([Item.new("Backstage passes to a TAFKAL80ETC concert", 15, 20)])
-      @item = items.first
+      @item = GildedRose::BackstagePass.new(15, 20)
     end
 
     describe 'sell_in' do
       it 'should decrease by 1' do
-        expect { subject.update_quality }.to change { @item.sell_in }.by(-1)
+        expect { @item.update_quality }.to change { @item.sell_in }.by(-1)
       end
     end
 
     describe 'quality' do
       it 'should increase by 1' do
-        expect { subject.update_quality }.to change { @item.quality }.by(1)
+        expect { @item.update_quality }.to change { @item.quality }.by(1)
       end
 
       it 'should increase by 2 when less than 10 days' do
-        @item.sell_in = 9
-        expect { subject.update_quality }.to change { @item.quality }.by(2)
+        @item = GildedRose::BackstagePass.new(15, 9)
+        expect { @item.update_quality }.to change { @item.quality }.by(2)
       end
 
       it 'should increase by 3 when less than 5 days' do
-        @item.sell_in = 4
-        expect { subject.update_quality }.to change { @item.quality }.by(3)
+        @item = GildedRose::BackstagePass.new(15, 4)
+        expect { @item.update_quality }.to change { @item.quality }.by(3)
       end
 
       it 'becomes 0 after sell_in date' do
-        @item.sell_in = -2
-        subject.update_quality
+        @item = GildedRose::BackstagePass.new(15, -2)
+        @item.update_quality
         @item.quality.should == 0
       end
     end
@@ -70,38 +68,36 @@ describe GildedRose do
 
   describe 'Sulfuras, Hand of Ragnaros' do
     before(:each) do
-      items = subject.items([Item.new("Sulfuras, Hand of Ragnaros", 0, 80)])
-      @item = items.first
+      @item = GildedRose::Sulfuras.new(2, 0)
     end
 
     describe 'sell_in' do
       it 'does not change' do
-        expect { subject.update_quality }.to change { @item.sell_in }.by(0)
+        expect { @item.update_quality }.to change { @item.sell_in }.by(0)
       end
     end
 
     describe 'quality' do
       it 'should never change' do
-        expect { subject.update_quality }.to change { @item.quality }.by(0)
+        expect { @item.update_quality }.to change { @item.quality }.by(0)
       end
     end
   end
 
   describe 'Aged Brie' do
     before(:each) do
-      items = subject.items([Item.new("Aged Brie", 2, 0)])
-      @item = items.first
+      @item = GildedRose::AgedBrie.new(2, 0)
     end
 
     describe 'sell_in' do
       it 'should decrease by 1' do
-        expect { subject.update_quality }.to change { @item.sell_in }.by(-1)
+        expect { @item.update_quality }.to change { @item.sell_in }.by(-1)
       end
     end
 
     describe 'quality' do
       it 'should increase by 1' do
-        expect { subject.update_quality }.to change { @item.quality }.by(1)
+        expect { @item.update_quality }.to change { @item.quality }.by(1)
       end
     end
   end
