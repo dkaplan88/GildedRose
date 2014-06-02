@@ -2,7 +2,7 @@ require './gilded_rose.rb'
 require "rspec"
 
 describe GildedRose do
-  describe 'handle normal items' do
+  describe '::Normal' do
     before(:each) do
       @item = GildedRose::Normal.new(3, 6)
     end
@@ -32,7 +32,7 @@ describe GildedRose do
     end
   end
 
-  describe 'Backstage, passes, to a TAFKAL80ETC concert' do
+  describe '::BackstagePass' do
     before(:each) do
       @item = GildedRose::BackstagePass.new(15, 20)
     end
@@ -66,7 +66,7 @@ describe GildedRose do
     end
   end
 
-  describe 'Sulfuras, Hand of Ragnaros' do
+  describe '::Sulfuras' do
     before(:each) do
       @item = GildedRose::Sulfuras.new(2, 0)
     end
@@ -84,7 +84,7 @@ describe GildedRose do
     end
   end
 
-  describe 'Aged Brie' do
+  describe '::AgedBrie' do
     before(:each) do
       @item = GildedRose::AgedBrie.new(2, 0)
     end

@@ -14,23 +14,30 @@ class GildedRose
     @items << Item.new("Conjured Mana Cake", 3, 6)
   end
 
-
-  def items(items)
-    @items = items
+  def update_quality
+    @items.map(&:update_quality)
   end
 
-  def update_quality
-    for i in 0..(@items.size-1)
-      case @items[i].name
+  class Item
+    def initialize(name, quality, sell_in)
+      @item = klass_for(name).new(quality, sell_in)
+    end
+
+    def klass_for(name)
+      case name
       when '+5 Dexterity Vest', 'Elixir of the Mongoose', 'Conjured Mana Cake'
-        Normal.new(@items[i].quality, @items[i].sell_in).update_quality
+        Normal
       when 'Aged Brie'
-        AgedBrie.new(@items[i].quality, @items[i].sell_in).update_quality
+        AgedBrie
       when 'Sulfuras, Hand of Ragnaros'
-        Sulfuras.new(@items[i].quality, @items[i].sell_in).update_quality
+        Sulfuras
       when 'Backstage passes to a TAFKAL80ETC concert'
-        BackstagePass.new(@items[i].quality, @items[i].sell_in).update_quality
+        BackstagePass
       end
+    end
+
+    def update_quality
+      @item.update_quality
     end
   end
 
